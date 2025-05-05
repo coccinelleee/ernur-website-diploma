@@ -1,0 +1,106 @@
+{% extends 'base_two.html' %}
+{% block content %}
+{% load static %}
+
+
+{% if request.GET.command == 'verification'%}
+
+    <!-- ...:::: Start Breadcrumb Section:::... -->
+    <div class="breadcrumb-section">
+        <div class="breadcrumb-wrapper">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 d-flex justify-content-between justify-content-md-between  align-items-center flex-md-row flex-column">
+                        <h3 class="breadcrumb-title">Тіркелгіні растау</h3>
+                        <div class="breadcrumb-nav">
+                            <nav aria-label="breadcrumb">
+                                <ul>
+                                    <li><a href="/">Басты бет</a></li>
+                                    <li class="active" aria-current="page">Тіркелгіні растау</li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> <!-- ...:::: End Breadcrumb Section:::... -->
+
+    <!-- ...:::: Start Error Section :::... -->
+    <div class="error-section">
+        <div class="container">
+            <div class="row">
+                <div class="error_form">
+                    <h4 data-aos="fade-up"  data-aos-delay="200">Есептік жазбаңызды растаңыз</h4>
+                    <p data-aos="fade-up"  data-aos-delay="400">Тіркелгеніңізге рахмет, электрондық поштаға хат жіберілді <br> {{request.GET.email}} тіркелгіңізді растаңыз</p>
+                    <div class="row">
+                        <div class="col-10 offset-1 col-md-6 offset-md-3">
+                             <p>Расталған ба?</p>
+                            <a href="{% url 'login' %}" data-aos="fade-up"  data-aos-delay="800">Жүйеге кіру</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> <!-- ...:::: End Error Section :::... -->
+
+
+{% else %}
+
+
+    <!-- ...:::: Start Breadcrumb Section:::... -->
+    <div class="breadcrumb-section">
+        <div class="breadcrumb-wrapper">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 d-flex justify-content-between justify-content-md-between  align-items-center flex-md-row flex-column">
+                        <h3 class="breadcrumb-title">Кіру</h3>
+                        <div class="breadcrumb-nav">
+                            <nav aria-label="breadcrumb">
+                                <ul>
+                                    <li><a href="/">Басты бет</a></li>
+                                    <li class="active" aria-current="page">Жүйеге кіру</li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> <!-- ...:::: End Breadcrumb Section:::... -->
+
+    <!-- ...:::: Start Customer Login Section :::... -->
+    <div class="customer_login">
+        <div class="container">
+            <div class="row justify-content-center">
+                <!--login area start-->
+                <div class="col-lg-6 col-md-6">
+                    <div class="account_form" data-aos="fade-up"  data-aos-delay="0">
+                        <h3>Жүйеге кіру</h3>
+                        <form action="{% url 'login' %}" method="POST">
+                            {% csrf_token %}
+                            <div class="default-form-box mb-20">
+                                <label>Пайдаланушы аты немесе электрондық пошта <span>*</span></label>
+                                <input type="email" name="email" placeholder="Email Address">
+                            </div>
+                            <div class="default-form-box mb-20">
+                                <label>Құпия сөздер <span>*</span></label>
+                                <input type="password" name="password" placeholder="Password" >
+                            </div>
+                            <div class="login_submit">
+                                <button class="mb-20" type="submit">кіру</button>
+                                <a href="{% url 'forgotPassword' %}">Парольді ұмыттым</a>
+                                <p class="text-center mt-4">Есептік жазбаңыз жоқ па? <a style="color: red" href="{% url 'register' %}">Тіркелу</a></p>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <!--login area start-->
+            </div>
+        </div>
+    </div> <!-- ...:::: End Customer Login Section :::... -->
+
+
+{% endif %}
+
+{% endblock %}

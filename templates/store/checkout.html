@@ -1,0 +1,173 @@
+{% extends 'base_two.html' %}
+{% block content %}
+{% load static %}
+{% load currency %}
+<style>
+.mon{
+    color: #474747;
+    font-size: 16px;
+    font-weight: 500;
+}
+.img-responsive {
+    max-width: 50%;
+    display: block;
+    width: 100%;
+}
+</style>
+ <!-- ...:::: Start Breadcrumb Section:::... -->
+    <div class="breadcrumb-section">
+        <div class="breadcrumb-wrapper">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 d-flex justify-content-between justify-content-md-between  align-items-center flex-md-row flex-column">
+                        <h3 class="breadcrumb-title">Шығу</h3>
+                        <div class="breadcrumb-nav">
+                            <nav aria-label="breadcrumb">
+                                <ul>
+                                    <li><a href="/">Басты бет</a></li>
+                                    <li class="active" aria-current="page">Шығу</li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> <!-- ...:::: End Breadcrumb Section:::... -->
+
+
+
+ <!-- ...:::: Start Checkout Section:::... -->
+    <div class="checkout_section">
+        <div class="container">
+            <!-- Start User Details Checkout Form -->
+            <div class="checkout_form" data-aos="fade-up"  data-aos-delay="400">
+                <div class="row">
+                    <div class="col-lg-6 col-md-6">
+                        <form action="{% url 'place_order' %}" method="POST">
+                            {% csrf_token %}
+                            <h3>Төлем мәліметтері</h3>
+                            <div class="row">
+                                <div class="col-lg-6 mb-20">
+                                    <div class="default-form-box">
+                                        <label>Аты <span>*</span></label>
+                                        <input type="text" name="аты_жөні" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 mb-20">
+                                    <div class="default-form-box">
+                                        <label>Тегі <span>*</span></label>
+                                        <input type="text" name="тегі" required >
+                                    </div>
+                                </div>
+
+                                <div class="col-12 mb-20">
+                                    <div class="default-form-box">
+                                        <label>Электрондық поштаның адресі</label>
+                                        <input type="email" name="email" required >
+                                    </div>
+                                </div>
+                                <div class="col-12 mb-20">
+                                    <div class="default-form-box">
+                                        <label>Телефон нөмірі <span>*</span></label>
+                                        <input type="text" name="phone" required >
+                                    </div>
+                                </div>
+                                <div class="col-12 mb-20">
+                                    <div class="default-form-box">
+                                        <label>Мекенжай жолы 1 <span>*</span></label>
+                                        <input type="text" name="address_line_1" required >
+                                    </div>
+                                </div>
+                                <div class="col-12 mb-20">
+                                    <div class="default-form-box">
+                                        <label>Мекенжай жолы 2 <span>*</span></label>
+                                        <input type="text" name="address_line_2" >
+                                    </div>
+                                </div>
+                                <div class="col-12 mb-20">
+                                    <div class="default-form-box">
+                                        <label>Қала <span>*</span></label>
+                                        <input type="text" name="city" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 mb-20">
+                                    <div class="default-form-box">
+                                        <label>Мемлекет<span>*</span></label>
+                                        <input type="text" name="state" required >
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 mb-20">
+                                    <div class="default-form-box">
+                                        <label> Ел <span>*</span></label>
+                                        <input type="text" name="country" required >
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <div class="order-notes">
+                                        <label>Тапсырыс жазбалары</label>
+                                        <textarea placeholder="Тапсырысыңыз туралы ескертпелер, мысалы: жеткізу үшін арнайы жазбалар. "
+                                    name="order_note"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                    </div>
+                    <div class="col-lg-6 col-md-6">
+                            <h3>Сіздің тапсырысыңыз</h3>
+                            <div style="overflow: hidden" class="order_table table-responsive">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Сурет</th>
+                                            <th>Бағасы</th>
+                                            <th>Саны</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for cart_item in cart_items %}
+                                    <tr>
+                                        <td class="product-thumbnail">
+                                             <div>
+                                            <a href="#"><img class="img-responsive ml-15px"
+                                                    src="{{ cart_item.product.images.url }}" alt="" /></a>
+                                             <a class="mon" href="{{cart_item.product.get_url}}">{{cart_item.product.product_name}}</a>
+                                            <p class="text-muted small">
+                                                {% if cart_item.variations.all %}
+                                                    {% for item in cart_item.variations.all %}
+                                                        {{ item.variation_category | capfirst }} : {{item.variation_value | capfirst }} <br>
+                                                    {% endfor %}
+                                                {% endif %}
+                                            </p>
+                                            </div>
+                                        </td>
+
+                                        <td class="product-price-cart">
+                                            <span class="amount">{{ cart_item.sub_total|currency:request.session.currency }} {{ request.session.currency }}</span>
+                                            <p class="text-muted small">{{ cart_item.product.price|currency:request.session.currency }} {{ request.session.currency }} әрқайсысы</p>
+                                        </td>
+                                        <td>
+                                             {{cart_item.quantity}}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="payment_method">
+                                <div class="order_button pt-15">
+                                    <button type="submit">Төлемге өту</button>
+                                </div>
+                                </form>
+                            </div>
+
+                    </div>
+                </div>
+            </div> <!-- Start User Details Checkout Form -->
+        </div>
+    </div><!-- ...:::: End Checkout Section:::... -->
+
+
+
+{% endblock %}

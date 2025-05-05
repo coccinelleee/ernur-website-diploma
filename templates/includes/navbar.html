@@ -1,0 +1,107 @@
+{% load static %}
+{% load currency %}
+
+<header class="header-section d-lg-block d-none">
+    <!-- TOP BAR -->
+    <div class="header-top py-2" style="background-color: #f8f9fa; border-bottom: 1px solid #e0e0e0;">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center flex-wrap">
+                <div class="text-dark fw-semibold small">
+                    {% if not user.is_authenticated %}
+                        Қош келдіңіз, <span class="text-muted">қолданушы!</span>
+                    {% else %}
+                        Қош келдіңіз, <span class="text-primary">{{ user.аты_жөні|capfirst }}</span>
+                    {% endif %}
+                </div>
+                <ul class="list-inline mb-0 small">
+                    <li class="list-inline-item me-3">
+                        <a href="/store" class="text-decoration-none text-dark"><i class="pe-7s-shopbag"></i> Сауда орны</a>
+                    </li>
+                    {% if user.is_authenticated %}
+                        <li class="list-inline-item me-3">
+                            <a href="{% url 'dashboard' %}" class="text-decoration-none text-dark"><i class="pe-7s-user"></i> Аккаунт</a>
+                        </li>
+                        <li class="list-inline-item me-3">
+                            <a href="{% url 'logout' %}" class="text-decoration-none text-danger"><i class="pe-7s-power"></i> Шығу</a>
+                        </li>
+                    {% else %}
+                        <li class="list-inline-item me-3">
+                            <a href="{% url 'login' %}" class="text-decoration-none text-dark">Кіру</a>
+                        </li>
+                        <li class="list-inline-item me-3">
+                            <a href="{% url 'register' %}" class="text-decoration-none text-dark">Тіркелу</a>
+                        </li>
+                    {% endif %}
+                    <li class="list-inline-item me-3">
+                        <a href="/store/contact" class="text-decoration-none text-dark"><i class="pe-7s-headphones"></i> Байланыс</a>
+                    </li>
+                    <li class="list-inline-item">
+                        <div class="dropdown d-inline">
+                            <a class="dropdown-toggle text-decoration-none text-dark" href="#" id="termsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                Жеткізу шарттары
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="termsDropdown">
+                                <li><a class="dropdown-item" href="/store/terms">Ережелер</a></li>
+                                <li><a class="dropdown-item" href="/store/delivery">Жеткізу</a></li>
+                                <li><a class="dropdown-item" href="/store/refund">Қайтару</a></li>
+                                <li><a class="dropdown-item" href="/store/privacy">Құпиялық</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN NAVIGATION -->
+    <div class="header-center py-3 bg-white border-bottom">
+        <div class="container">
+            <div class="row align-items-center justify-content-between">
+                <!-- Logo -->
+                <div class="col-2">
+                    <div class="header-logo">
+                        <a href="/">
+                            <img src="{% static 'images/icon/car.png' %}" alt="Logo" style="height: auto; width: 100px;">
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Search -->
+                <div class="col-5">
+                    <form action="{% url 'search' %}" method="GET" role="search">
+                        <div class="input-group">
+                            <input type="text" name="my-search" class="form-control" placeholder="Бүкіл сауда орнында осы жерден іздеңіз ..." required>
+                            <button class="btn btn-danger" type="submit"><i class="icon-search"></i></button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Cart + Currency -->
+                <div class="col-5 text-end">
+                    <div class="d-flex justify-content-end align-items-center gap-3">
+                        <!-- Cart Icon -->
+                        <a href="{% url 'cart' %}" class="position-relative text-dark fs-5">
+                            <i class="icon-shopping-cart"></i>
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                {{ cart_count }}
+                            </span>
+                        </a>
+
+                        <!-- Currency and Save Button -->
+                        <form method="POST" action="{% url 'savelangcur' %}" class="d-flex align-items-center gap-2">
+                            {% csrf_token %}
+                            <select name="currency" class="form-select form-select-sm" style="width: auto; min-width: 110px;">
+                                {% for curr in CURRENCIES %}
+                                    <option value="{{ curr.code }}" {% if curr.code == request.session.currency %}selected{% endif %}>
+                                        {{ curr.symbol }} {{ curr.name }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                            <button type="submit" class="btn btn-outline-primary btn-sm">Сақтау</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>

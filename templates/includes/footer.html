@@ -1,0 +1,124 @@
+{% load static %}
+
+<footer class="footer-section bg-light pt-5">
+    <!-- Top Section -->
+    <div class="container">
+        <div class="row g-5">
+            <!-- Logo & Contact -->
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <a href="/"><img src="{% static 'images/icon/car.png' %}" alt="Logo" style="width: 100px;" class="img-fluid"></a>
+                </div>
+                <p class="text-muted small">
+                    Auto parts store in Atyrau, Kazakhstan, Kazakhstan business registration<br>
+                    <strong>GUW - 000060</strong>
+                </p>
+                <div class="d-flex align-items-center mt-3">
+                    <img src="https://cdn.jsdelivr.net/gh/DonGuillotine/aments/assets/images/icon/support-icon.png" alt="Support" style="height: 40px;" class="me-2">
+                    <div>
+                        <span class="small text-muted">Тұтынушыларды қолдау</span><br>
+                        <a href="tel:+77780836006" class="fw-bold text-dark text-decoration-none fs-6">+7 (778) 083-60-06</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Info Links -->
+            <div class="col-md-6">
+                <h5 class="mb-3">Ақпарат</h5>
+                <ul class="list-unstyled">
+                    <li><a href="/store" class="text-decoration-none text-muted d-block py-1">Сауда орталығы</a></li>
+                    <li><a href="/store/terms" class="text-decoration-none text-muted d-block py-1">Ережелер мен шарттар</a></li>
+                    {% if user.is_authenticated %}
+                        <li><a href="{% url 'dashboard' %}" class="text-decoration-none text-muted d-block py-1">Менің аккаунтым</a></li>
+                        <li><a href="{% url 'logout' %}" class="text-decoration-none text-danger d-block py-1"><i class="pe-7s-power"></i> Шығу</a></li>
+                    {% else %}
+                        <li><a href="{% url 'login' %}" class="text-decoration-none text-muted d-block py-1">Кіру</a></li>
+                        <li><a href="{% url 'register' %}" class="text-decoration-none text-muted d-block py-1">Тіркелу</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+
+        <hr class="my-4">
+
+        <!-- Bottom Section -->
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
+            <p class="mb-2 mb-md-0 small text-muted">
+                Авторлық құқық &copy; 2025 <a href="https://ernurautoemporium.com/" class="text-danger text-decoration-none">ernurautoemporium.com</a>
+            </p>
+            <div class="footer-payment">
+                <img src="{% static 'images/icons/payment.png' %}" alt="Payment Methods" class="img-fluid" style="height: 30px;">
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Scripts -->
+<script src="{% static 'js/vendorx.min.js' %}"></script>
+<script src="{% static 'js/pluginsx.min.js' %}"></script>
+<script src="{% static 'js/mainx.js' %}"></script>
+<script src="{% static 'js/plugins/swiper-bundle.min.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.4/dist/sweetalert2.all.min.js"></script>
+
+<script>
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+});
+
+(function($){
+  $('#selection').change(function(){
+    var getValue = $(this).val();
+    window.open(getValue, '_self');
+  })
+})(jQuery);
+</script>
+
+{% for message in messages %}
+<script>
+Swal.fire(
+  '{{ message }}',
+  '',
+  '{{ message.tags }}'
+);
+</script>
+{% endfor %}
+
+{% for cart_item in cart_items %}
+<script>
+document.getElementById('{{ forloop.counter }}').onclick = function() {
+  const swalWithBootstrapButtons = Swal.mixin({
+    customClass: {
+      confirmButton: 'btn btn-success',
+      cancelButton: 'btn btn-danger'
+    },
+    buttonsStyling: false
+  });
+
+  swalWithBootstrapButtons.fire({
+    title: 'Жойғыңыз келетініне сенімдісіз бе {{ cart_item.product.product_name }}?',
+    text: "Сіз мұны қайтара алмайсыз!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: "<a href='{% url 'delete_cart' cart_item.product.id cart_item.id %}'>Иә, алып тастаңыз!</a>",
+    cancelButtonText: 'Жоқ, бас тарту!',
+    reverseButtons: true
+  }).then((result) => {
+    if (result.isConfirmed) {
+      swalWithBootstrapButtons.fire(
+        'Жойылды!',
+        'Сіздің {{ cart_item.product.product_name }} арбадан алынып тасталды.',
+        'success'
+      )
+    } else if (result.dismiss === Swal.DismissReason.cancel) {
+      swalWithBootstrapButtons.fire(
+        'Бас тартылды',
+        'Сіздің затыңыз қауіпсіз :)',
+        'error'
+      )
+    }
+  });
+};
+</script>
+{% endfor %}
+</body>
+</html>

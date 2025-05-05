@@ -1,0 +1,99 @@
+{% extends 'base_two.html' %}
+{% block content %}
+{% load static %}
+
+  <!-- ...:::: Start Breadcrumb Section:::... -->
+    <div class="breadcrumb-section">
+        <div class="breadcrumb-wrapper">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 d-flex justify-content-between justify-content-md-between  align-items-center flex-md-row flex-column">
+                        <h3 class="breadcrumb-title">Профильді өзгерту</h3>
+                        <div class="breadcrumb-nav">
+                            <nav aria-label="breadcrumb">
+                                <ul>
+                                    <li><a href="/">Басты бет</a></li>
+                                    <li class="active" aria-current="page">Профильді өзгерту</li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> <!-- ...:::: End Breadcrumb Section:::... -->
+
+    <!-- ...:::: Start Account Dashboard Section:::... -->
+    <div class="account_dashboard">
+        <div class="container">
+            <div class="row">
+                {% include 'includes/dashboard_sidebar.html' %}
+                <div class="col-sm-12 col-md-9 col-lg-9">
+                    <!-- Tab panes -->
+                    <div class="dashboard_content" data-aos="fade-up"  data-aos-delay="200">
+                        <div class="tab-pane" id="account-details">
+                            <h3>Есептік жазба мәліметтері </h3>
+                            <div style="text-align: center">
+                                {% if userprofile.profile_picture %}
+                                    <img class="mb-50 mt-5" style="border-radius:10%; height:150px" src="{{ userprofile.profile_picture.url }}">
+                                {% else %}
+                                    <img class="mb-50 mt-5" style="border-radius:10%; height:150px" src="{% static 'images/default-profile.png' %}">
+                                {% endif %}
+                            </div>
+                            <div class="login">
+                                <div class="login_form_container">
+                                    <div class="account_login_form">
+                                        <form action="{% url 'edit_profile' %}" method="POST" enctype="multipart/form-data">
+                                             {% csrf_token %}
+                                            <div class="default-form-box mb-20">
+                                                <label>Аты</label>
+                                                {{ user_form.аты_жөні }}
+                                            </div>
+                                            <div class="default-form-box mb-20">
+                                                <label>Тегі</label>
+                                                {{ user_form.тегі }}
+                                            </div>
+                                            <div class="default-form-box mb-20">
+                                                <label>Телефон нөмірі</label>
+                                                {{ user_form.телефон_нөмірі }}
+                                            </div>
+                                            <div class="default-form-box mb-20">
+                                                <label>Мекенжай жолы 1</label>
+                                                {{ profile_form.address_line_1 }}
+                                            </div>
+                                            <div class="default-form-box mb-20">
+                                                <label>Мекенжай жолы 2</label>
+                                                {{ profile_form.address_line_2 }}
+                                            </div>
+                                            <div class="default-form-box mb-20">
+                                                <label>Қала</label>
+                                                {{ profile_form.city }}
+                                            </div>
+                                            <div class="default-form-box mb-20">
+                                                <label>Мемлекет</label>
+                                                {{ profile_form.state }}
+                                            </div>
+                                            <div class="default-form-box mb-20">
+                                                <label>Ел</label>
+                                                {{ profile_form.country }}
+                                            </div>
+                                            <div class="default-form-box mb-20">
+                                                <label>Профиль суреті</label>
+                                                {{ profile_form.profile_picture }}
+                                            </div>
+
+                                            <div class="save_button primary_btn default_button">
+                                                <button type="submit">Сақтау</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> <!-- ...:::: End Account Dashboard Section:::... -->
+
+{% endblock %}
