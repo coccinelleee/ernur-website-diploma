@@ -1,11 +1,12 @@
 import os
+import json
 from pathlib import Path
 from decouple import config
+from google.oauth2 import service_account
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = config('SECRET_KEY')
-
 DEBUG = config('DEBUG', default=False, cast=bool)
 
 ALLOWED_HOSTS = []
@@ -100,12 +101,13 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 if not DEBUG:
-    DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
-    GOOGLE_APPLICATION_CREDENTIALS = config('GOOGLE_APPLICATION_CREDENTIALS')
     GS_BUCKET_NAME = config('GS_BUCKET_NAME', default='ernur-project')
     GS_PROJECT_ID = 'ernur-project'
-    MEDIA_URL = f'https://storage.googleapis.com/{GS_BUCKET_NAME}/'
+    GOOGLE_CREDS = json.loads(config('GOOGLE_CREDENTIALS_JSON'))
+    GS_CREDENTIALS = service_account.Credentials.from_service_account_info(GOOGLE_CREDS)
 
+    DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+    MEDIA_URL = f'https://storage.googleapis.com/{GS_BUCKET_NAME}/'
 
 # SMTP (Anymail + Mailjet)
 ANYMAIL = {
