@@ -2,7 +2,6 @@
 {% load static %}
 
 {% block content %}
-{% load currency %}
 
  <!-- ...:::: Start Breadcrumb Section:::... -->
     <div class="breadcrumb-section">
@@ -126,7 +125,6 @@
                                                         </div>
                                                         <div class="product-default-content">
                                                             <h6 class="product-default-link"><a href="{{ stores.get_url }}">{{ stores.product_name }}</a></h6>
-                                                            <span class="product-default-price">{{ stores.price|currency:request.session.currency }} {{ request.session.currency }}</span>
                                                         </div>
                                                     </div> <!-- End Product Defautlt Single -->
                                                 </div>
@@ -167,7 +165,7 @@
                                                         </a>
                                                         <div class="product-list-content">
                                                             <h5 class="product-list-link"><a href="{{ stores.get_url }}">{{ stores.product_name }}</a></h5>
-                                                            <span class="product-list-price">{{ stores.price|currency:request.session.currency }} {{ request.session.currency }}</span>
+                                                            <span class="product-list-price">
                                                             <p>{{ stores.description }}</p>
                                                             <div class="product-action-icon-link-list">
                                                                  <span class="ratings">

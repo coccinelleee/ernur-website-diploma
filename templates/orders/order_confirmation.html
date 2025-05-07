@@ -1,0 +1,15 @@
+{% extends 'base_two.html' %}
+{% block content %}
+<div class="container mt-5">
+    <h2>Тапсырысыңыз сәтті қабылданды!</h2>
+    <p>Рахмет, {{ order.аты_жөні }}. Сіздің тапсырысыңыз сәтті өңделді.</p>
+
+    <ul>
+        <li><strong>Тапсырыс нөмірі:</strong> {{ order.order_number }}</li>
+        <li><strong>Жалпы сома:</strong> {{ grand_total|floatformat:2 }} {{ request.session.currency }}</li>
+        <li><strong>Салық:</strong> {{ tax|floatformat:2 }} {{ request.session.currency }}</li>
+    </ul>
+
+    <a href="{% url 'store' %}" class="btn btn-primary">Саудаға оралу</a>
+</div>
+{% endblock %}

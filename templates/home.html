@@ -1,7 +1,6 @@
 {% extends 'base_two.html' %}
 {% block content %}
 {% load static %}
-{% load currency %}
 
 <div class="offcanvas-overlay"></div>
 
@@ -112,7 +111,6 @@
                                                     <div class="product-default-content">
                                                         <h6 class="product-default-link"><a href="{{ products.get_url }}">{{ products.product_name }}</a></h6>
                                                         <span class="product-default-price">
-                                                            {{ products.price|currency:currency.code }} {{ currency.symbol }}
                                                         </span>
                                                     </div>
                                                 </div> 
@@ -131,7 +129,7 @@
                                                     </a>
                                                     <div class="product-list-content">
                                                         <h5 class="product-list-link"><a href="{{ products.get_url }}">{{ products.product_name }}</a></h5>
-                                                        <span class="product-list-price">{{ products.price|currency:request.session.currency }} {{ request.session.currency }}</span>
+                                                        <span class="product-list-price">
                                                         <p>{{ products.description }}</p>
                                                         <div class="product-action-icon-link-list">
                                                             <span class="ratings">

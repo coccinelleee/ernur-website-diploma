@@ -7,9 +7,9 @@ from google.oauth2 import service_account
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = config('SECRET_KEY')
-DEBUG = config('DEBUG', default=False, cast=bool)
+DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -18,8 +18,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'anymail',
     'currencies',
+    'anymail',
     'storages',
     'category',
     'accounts',
@@ -101,12 +101,15 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 if not DEBUG:
+    DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
     GS_BUCKET_NAME = config('GS_BUCKET_NAME', default='ernur-project')
     GS_PROJECT_ID = 'ernur-project'
-    GOOGLE_CREDS = json.loads(config('GOOGLE_CREDENTIALS_JSON'))
+
+    with open(config("GOOGLE_APPLICATION_CREDENTIALS")) as f:
+        GOOGLE_CREDS = json.load(f)
+
     GS_CREDENTIALS = service_account.Credentials.from_service_account_info(GOOGLE_CREDS)
 
-    DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
     MEDIA_URL = f'https://storage.googleapis.com/{GS_BUCKET_NAME}/'
 
 # SMTP (Anymail + Mailjet)

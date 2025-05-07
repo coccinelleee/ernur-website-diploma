@@ -1,5 +1,4 @@
 {% load static %}
-{% load currency %}
 
 <header class="header-section d-lg-block d-none">
     <!-- TOP BAR -->
@@ -88,16 +87,8 @@
                         </a>
 
                         <!-- Currency and Save Button -->
-                        <form method="POST" action="{% url 'savelangcur' %}" class="d-flex align-items-center gap-2">
-                            {% csrf_token %}
-                            <select name="currency" class="form-select form-select-sm" style="width: auto; min-width: 110px;">
-                                {% for curr in CURRENCIES %}
-                                    <option value="{{ curr.code }}" {% if curr.code == request.session.currency %}selected{% endif %}>
-                                        {{ curr.symbol }} {{ curr.name }}
-                                    </option>
-                                {% endfor %}
+
                             </select>
-                            <button type="submit" class="btn btn-outline-primary btn-sm">Сақтау</button>
                         </form>
                     </div>
                 </div>

@@ -120,11 +120,13 @@ def logout(request):
 
 @login_required(login_url='login')
 def dashboard(request):
-    user_profile, _ = UserProfile.objects.get_or_create(user=request.user)
-    profile_picture = user_profile.profile_picture or static('images/default-profile.png')
+    user_profile, created = UserProfile.objects.get_or_create(user=request.user)
+    orders = Order.objects.filter(user=request.user, is_ordered=True)
+    order_count = orders.count()
 
     context = {
-        'profile_picture': profile_picture,
+        'profile_picture': user_profile.profile_picture,
+        'order_count': order_count,
     }
 
     return render(request, 'accounts/dashboard.html', context)
@@ -206,7 +208,7 @@ def edit_profile(request):
             user_form.save()
             profile_form.save()
             messages.success(request, 'Профиль сәтті жаңартылды')
-            return redirect('edit_profile')
+            return redirect('dashboard')
     else:
         user_form = UserForm(instance=request.user)
         profile_form = UserProfileForm(instance=userprofile)

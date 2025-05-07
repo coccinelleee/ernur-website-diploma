@@ -84,7 +84,7 @@ class ReviewRating(models.Model):
 
 class ProductGallery(models.Model):
     product = models.ForeignKey(Product, default=None, on_delete=models.CASCADE)
-    image_filename = models.CharField(max_length=255, blank=True, null=True)
+    image = models.ImageField(upload_to='products/gallery/')
 
     def __str__(self):
         return self.product.product_name

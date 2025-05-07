@@ -1,6 +1,6 @@
 {% extends 'base_two.html' %}
 {% load static %}
-{% load currency %}
+
 
 {% block content %}
 
@@ -93,9 +93,9 @@
                                         <i class="fa fa-star{% if single_product.average_review < 4.5 %}-o{% elif single_product.average_review >= 4.5 and single_product.average_review < 5 %}-half-o{% endif %}"></i>
                                     </div>
                                 </div>
-                                <a href="" class="customer-review">{{ single_product.review_count }} Review(s)</a>
+                                <a href="" class="customer-review">{{ single_product.review_count }} Қарау(лар)</a>
                             </div>
-                            <div class="price">{{ single_product.price|currency:request.session.currency }} {{ request.session.currency }}</div>
+                            <div class="price">{{ single_product.price }} {{ request.session.currency }}</div>
                             {% if single_product.stock <= 0 %}
                             <h4 style="color: red" class="title"><i class="fa fa-times" style="color: red"></i> Қоймада жоқ</h4>
                             {% else %}

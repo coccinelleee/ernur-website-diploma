@@ -1,7 +1,6 @@
 {% extends 'base_two.html' %}
 {% block content %}
 {% load static %}
-{% load currency %}
 <style>
 .mon{
     color: #474747;
@@ -75,26 +74,14 @@
                                 </div>
                                 <div class="col-12 mb-20">
                                     <div class="default-form-box">
-                                        <label>Мекенжай жолы 1 <span>*</span></label>
+                                        <label>Мекенжай жолы<span>*</span></label>
                                         <input type="text" name="address_line_1" required >
-                                    </div>
-                                </div>
-                                <div class="col-12 mb-20">
-                                    <div class="default-form-box">
-                                        <label>Мекенжай жолы 2 <span>*</span></label>
-                                        <input type="text" name="address_line_2" >
                                     </div>
                                 </div>
                                 <div class="col-12 mb-20">
                                     <div class="default-form-box">
                                         <label>Қала <span>*</span></label>
                                         <input type="text" name="city" required>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 mb-20">
-                                    <div class="default-form-box">
-                                        <label>Мемлекет<span>*</span></label>
-                                        <input type="text" name="state" required >
                                     </div>
                                 </div>
                                 <div class="col-lg-6 mb-20">
@@ -144,8 +131,8 @@
                                         </td>
 
                                         <td class="product-price-cart">
-                                            <span class="amount">{{ cart_item.sub_total|currency:request.session.currency }} {{ request.session.currency }}</span>
-                                            <p class="text-muted small">{{ cart_item.product.price|currency:request.session.currency }} {{ request.session.currency }} әрқайсысы</p>
+                                            <span class="amount">{{ cart_item.sub_total|floatformat:2 }} {{ request.session.currency }} {{ request.session.currency }}</span>
+                                            <p class="text-muted small">{{ cart_item.product.price|floatformat:2 }} {{ request.session.currency }} әрқайсысы</p>
                                         </td>
                                         <td>
                                              {{cart_item.quantity}}
