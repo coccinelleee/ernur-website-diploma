@@ -105,13 +105,16 @@ if not DEBUG:
     GS_PROJECT_ID = 'ernur-project'
 
     GOOGLE_CREDENTIALS_JSON = config("GOOGLE_CREDENTIALS_JSON", default=None)
+
     if GOOGLE_CREDENTIALS_JSON:
         try:
             GOOGLE_CREDS = json.loads(GOOGLE_CREDENTIALS_JSON)
+            if isinstance(GOOGLE_CREDS, str):  # 🔍 защита от двойной сериализации
+                GOOGLE_CREDS = json.loads(GOOGLE_CREDS)
             GS_CREDENTIALS = service_account.Credentials.from_service_account_info(GOOGLE_CREDS)
             MEDIA_URL = f'https://storage.googleapis.com/{GS_BUCKET_NAME}/'
-        except json.JSONDecodeError:
-            raise Exception("GOOGLE_CREDENTIALS_JSON: Invalid JSON format")
+        except Exception as e:
+            raise Exception(f"Google credentials load failed: {e}")
 
 # 📧 Mailjet
 ANYMAIL = {
