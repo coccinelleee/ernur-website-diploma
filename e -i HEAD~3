@@ -1,0 +1,83 @@
+[33mcommit a2b30cfc5e35759fea9dbc5cea8f3574b330f973[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m)[m
+Author: Dilnaz <dilnaz.m13@gmail.com>
+Date:   Thu May 8 18:51:40 2025 +0500
+
+    Удалил json-файл с ключами из коммита и добавил в .gitignore
+
+[33mcommit 94bc860cbc6b057d8598bfc22969e92036e6e4c4[m
+Author: Dilnaz <dilnaz.m13@gmail.com>
+Date:   Thu May 8 18:50:34 2025 +0500
+
+    Обновил requirements.txt и подготовил проект к деплою
+
+[33mcommit 807a4b414ed77b59679de3fa0758291fab9ab5c4[m[33m ([m[1;31morigin/main[m[33m)[m
+Author: Dilnaz <dilnaz.m13@gmail.com>
+Date:   Thu May 8 18:01:14 2025 +0500
+
+    Добавлен отзыв на товар Brembo и исправления отображения отзывов
+
+[33mcommit 4bd4261cc195f1651b7420623a1ece9c092787c5[m
+Author: Dilnaz <dilnaz.m13@gmail.com>
+Date:   Wed May 7 16:59:59 2025 +0500
+
+    comment
+
+[33mcommit 10f509b5fa34996c3bb35624e96c5bdc7b8f5d25[m
+Author: Dilnaz <dilnaz.m13@gmail.com>
+Date:   Wed May 7 00:46:45 2025 +0500
+
+    Удалены конфликтующие зависимости
+
+[33mcommit bb573cd6fa1ef680fe8590cea55255163da9ffdf[m
+Author: Dilnaz <dilnaz.m13@gmail.com>
+Date:   Wed May 7 00:19:54 2025 +0500
+
+    Удалён pywin32  несовместим с Linux
+
+[33mcommit e282473de7713fba2502bcf5245d5d95eaa07108[m
+Author: Dilnaz <dilnaz.m13@gmail.com>
+Date:   Wed May 7 00:16:01 2025 +0500
+
+    Обновлены зависимости, удалён старый jsonfield, исправлена поддержка Django 4
+
+[33mcommit 8d63d49ea183733952968981549bbb35cf37dbce[m
+Author: Dilnaz <dilnaz.m13@gmail.com>
+Date:   Tue May 6 23:58:01 2025 +0500
+
+    Переписан settings.py: замена GOOGLE_APPLICATION_CREDENTIALS на GOOGLE_CREDENTIALS_JSON
+
+[33mcommit 268e06945a8b2a5966eb34d045311499fb2a4f63[m
+Author: Dilnaz <dilnaz.m13@gmail.com>
+Date:   Tue May 6 23:50:52 2025 +0500
+
+    Удалён pypiwin32 для поддержки Linux
+
+[33mcommit 75ce1ab4ef6b2a452ec3f3dadde176916615dad9[m
+Author: Dilnaz <dilnaz.m13@gmail.com>
+Date:   Tue May 6 23:45:10 2025 +0500
+
+    Удалён pywin32 для совместимости с Linux
+
+[33mcommit b131df90b5d5cf075be4bf7b094c30f133bc2897[m
+Author: Dilnaz <dilnaz.m13@gmail.com>
+Date:   Tue May 6 23:30:36 2025 +0500
+
+    Установлен gunicorn и обновлены зависимости
+
+[33mcommit 3390ad3a1f7348e68d57df7e2b1b41f58126857b[m
+Author: Dilnaz <dilnaz.m13@gmail.com>
+Date:   Tue May 6 02:47:57 2025 +0500
+
+    Настроен Procfile и зависимости
+
+[33mcommit 5a3f719e3a907033ca46dd78c0498fc867e0dfcc[m
+Author: Dilnaz <dilnaz.m13@gmail.com>
+Date:   Tue May 6 02:45:56 2025 +0500
+
+    обновлен requirements.txt
+
+[33mcommit 9b5c977beef81234b5427d2e2adaa6dd9cf32418[m
+Author: Dilnaz <dilnaz.m13@gmail.com>
+Date:   Tue May 6 02:39:54 2025 +0500
+
+    Initial commit
