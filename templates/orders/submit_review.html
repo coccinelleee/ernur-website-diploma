@@ -1,0 +1,97 @@
+{% extends 'base_two.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+    .star-rating {
+        direction: rtl;
+        display: flex;
+        justify-content: flex-start;
+        gap: 2px;
+    }
+
+    .star-rating input[type="radio"] {
+        display: none;
+    }
+
+    .star-rating label {
+        font-size: 25px;
+        color: #ccc;
+        cursor: pointer;
+        transition: color 0.3s ease;
+    }
+
+    .star-rating input[type="radio"]:checked ~ label,
+    .star-rating label:hover,
+    .star-rating label:hover ~ label {
+        color: #ea1c26;
+    }
+
+    .btn-custom-red {
+        background-color: #ea1c26 !important;
+        color: white !important;
+        border: none;
+        padding: 10px 25px;
+        font-weight: 500;
+        border-radius: 4px;
+        transition: 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 16px;
+    }
+
+    .btn-custom-red:hover {
+        background-color: #c2151d !important;
+        box-shadow: 0 4px 12px rgba(234, 28, 38, 0.3);
+    }
+
+    .btn-custom-red i {
+        font-size: 18px;
+    }
+</style>
+
+<div class="container mt-5 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm p-4 border-0">
+                <div class="card-body">
+                    <h4 class="mb-4 text-center">Пікір қалдыру: <strong>{{ product.product_name }}</strong></h4>
+
+                    <form method="POST">
+                        {% csrf_token %}
+
+                        <div class="mb-3">
+                            <label for="subject" class="form-label">Шолу тақырыбы:</label>
+                            <input type="text" name="subject" class="form-control" placeholder="Пікір тақырыбы" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Сіздің бағаңыз:</label><br>
+                            <div class="star-rating">
+                                {% for val in rating_choices %}
+                                    <input type="radio" id="star{{ forloop.counter }}" name="rating" value="{{ val }}" required>
+                                    <label for="star{{ forloop.counter }}" title="{{ val }}">★</label>
+                                {% endfor %}
+                            </div>                            
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="review" class="form-label">Сіздің пікіріңіз:</label>
+                            <textarea name="review" class="form-control" rows="5" placeholder="Мұнда өз пікіріңізді жазыңыз..." required></textarea>
+                        </div>
+
+                        <div class="text-end mt-4">
+                            <button type="submit" class="btn-custom-red">
+                                <i class="fa fa-paper-plane"></i> Жіберу
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

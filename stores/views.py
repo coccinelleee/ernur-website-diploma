@@ -1,4 +1,6 @@
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.http import JsonResponse
 from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
@@ -13,58 +15,37 @@ from django.core.mail import EmailMessage, BadHeaderError
 from django.conf import settings
 
 
-# Create your views here.
-
 
 def store(request, category_slug=None):
     categories = None
     products = None
-    if category_slug != None:
+    if category_slug:
         categories = get_object_or_404(Category, url=category_slug)
         products = Product.objects.filter(category=categories, is_available=True)
         paginator = Paginator(products, 6)
-        page = request.GET.get('page')
-        paged_products = paginator.get_page(page)
-        product_count = products.count()
     else:
-        products = Product.objects.all().filter(is_available=True).order_by('id')
+        products = Product.objects.filter(is_available=True).order_by('id')
         paginator = Paginator(products, 30)
-        page = request.GET.get('page')
-        paged_products = paginator.get_page(page)
-        product_count = products.count()
-
-        # Get the reviews
-    reviews = None
-    for products in products:
-        reviews = ReviewRating.objects.filter(product_id=products.id, status=True)
-    context = {'product': paged_products, 'product_count': product_count, 'reviews': reviews}
+    page = request.GET.get('page')
+    paged_products = paginator.get_page(page)
+    product_count = products.count()
+    context = {'product': paged_products, 'product_count': product_count}
     return render(request, 'store/store.html', context)
 
-
 def product_details(request, category_slug, product_slug):
-    try:
-        single_product = Product.objects.get(category__url=category_slug, slug=product_slug)
-        if_in_cart = CartItem.objects.filter(cart__cart_id=_cart_id(request), product=single_product).exists()
-    except Exception as e:
-        raise e
-#  TO CHECK IF A PRODUCT HAS BEEN ORDERED
-    if request.user.is_authenticated:
-        try:
-            order_product = OrderProduct.objects.filter(user=request.user, product_id=single_product).exists()
-        except OrderProduct.DoesNotExist:
-            order_product = None
-    else:
-        order_product = None
-
-# TO SHOW ALL REVIEWS ON A PARTICULAR PRODUCT
-    reviews = ReviewRating.objects.filter(product_id=single_product.id, status=True)
-
-    # TO SHOW THE PRODUCT GALLERY
-    product_gallery = ProductGallery.objects.filter(product_id=single_product.id)
-
-    context = {'single_product': single_product, 'if_in_cart': if_in_cart, 'order_product': order_product, 'reviews': reviews, 'product_gallery': product_gallery}
+    single_product = get_object_or_404(Product, category__url=category_slug, slug=product_slug)
+    if_in_cart = CartItem.objects.filter(cart__cart_id=_cart_id(request), product=single_product).exists()
+    order_product = OrderProduct.objects.filter(user=request.user, product=single_product).exists() if request.user.is_authenticated else None
+    reviews = ReviewRating.objects.filter(product=single_product, status=True)
+    product_gallery = ProductGallery.objects.filter(product=single_product)
+    context = {
+        'single_product': single_product,
+        'if_in_cart': if_in_cart,
+        'order_product': order_product,
+        'reviews': reviews,
+        'product_gallery': product_gallery
+    }
     return render(request, 'store/product_details.html', context)
-
 
 def search(request):
     if 'my-search' in request.GET:  # If my-search which is input name=search is in the url; store it in the variable my-search
@@ -80,29 +61,40 @@ def search(request):
         return render(request, 'store/store.html', context)
 
 
+@login_required(login_url='login')
 def submit_review(request, product_id):
-    url = request.META.get('HTTP_REFERER')  # TO GET THE URL OF THE CURRENT PAGE AND PASS IT TO THE REDIRECT FUNCTION
+    url = request.META.get('HTTP_REFERER')  # Для возврата на ту же страницу
+    product = get_object_or_404(Product, id=product_id)
+
     if request.method == 'POST':
-        #  PERFORM TWO CHECKS->IF A USER HAS ALREADY REVIEWED A PRODUCT UPDATE HIS REVIEW ELSE CREATE A NEW REVIEW
         try:
-            reviews = ReviewRating.objects.get(user__id=request.user.id, product__id=product_id)
-            form = ReviewForm(request.POST, instance=reviews)  #  THE INSTANCE->reviews GETS THE FORM UPDATED NOT CREATED!
-            form.save()
-            messages.success(request, "Your Review Has Been Updated")
-            return redirect(url)
+            # Если отзыв уже существует — обновим его
+            existing_review = ReviewRating.objects.get(user=request.user, product=product)
+            form = ReviewForm(request.POST, instance=existing_review)
+            if form.is_valid():
+                updated_review = form.save(commit=False)
+                updated_review.ip = request.META.get('REMOTE_ADDR')
+                updated_review.status = True  # ВАЖНО: показывать на странице
+                updated_review.save()
+                messages.success(request, 'Сіздің пікіріңіз жаңартылды.')
         except ReviewRating.DoesNotExist:
             form = ReviewForm(request.POST)
             if form.is_valid():
-                data = ReviewRating()
-                data.subject = form.cleaned_data['subject']
-                data.rating = form.cleaned_data['rating']
-                data.review = form.cleaned_data['review']
-                data.ip = request.META.get('REMOTE_ADDR')
-                data.product_id = product_id
-                data.user_id = request.user.id
-                data.save()
-                messages.success(request, 'Your review has been submitted')
-                return redirect(url)
+                new_review = ReviewRating(
+                    subject=form.cleaned_data['subject'],
+                    review=form.cleaned_data['review'],
+                    rating=form.cleaned_data['rating'],
+                    ip=request.META.get('REMOTE_ADDR'),
+                    product=product,
+                    user=request.user,
+                    status=True  # ВАЖНО: показывать на странице
+                )
+                new_review.save()
+                messages.success(request, 'Сіздің пікіріңіз сәтті жіберілді.')
+            else:
+                messages.error(request, 'Формада қате бар.')
+
+    return redirect(url)
 
 
 def terms(request):
@@ -146,3 +138,15 @@ def contact(request):
                 return HttpResponse('Жарамсыз тақырып табылды.')
             return redirect('home')
     return render(request, "store/contact.html", {'form': form})
+
+def home(request):
+    return render(request, 'home.html')
+
+def selectcurrency(request):
+    return HttpResponse("Currency selection placeholder")
+
+from django.http import JsonResponse
+
+def savelangcur(request):
+    # Заглушка: ничего не делает, но возвращает успешный ответ
+    return JsonResponse({'status': 'ok'})

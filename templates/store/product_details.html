@@ -1,7 +1,6 @@
 {% extends 'base_two.html' %}
 {% load static %}
 
-
 {% block content %}
 
 <style>
@@ -93,7 +92,7 @@
                                         <i class="fa fa-star{% if single_product.average_review < 4.5 %}-o{% elif single_product.average_review >= 4.5 and single_product.average_review < 5 %}-half-o{% endif %}"></i>
                                     </div>
                                 </div>
-                                <a href="" class="customer-review">{{ single_product.review_count }} Қарау(лар)</a>
+                                <a href="#" class="customer-review">{{ single_product.review_count }} Қарау(лар)</a>
                             </div>
                             <div class="price">{{ single_product.price }} {{ request.session.currency }}</div>
                             {% if single_product.stock <= 0 %}
@@ -159,85 +158,32 @@
                 <div class="product-details-content-tab-wrapper" data-aos="fade-up" data-aos-delay="0">
                     <div class="product-details-content-tab">
                         <div class="single-tab-content-item">
-                            <ul class="comment">
+                            <h5 class="mb-4">Пікірлер</h5>
+
+                            {% if reviews %}
                                 {% for review in reviews %}
-                                <li class="comment-list">
-                                    <div class="comment-wrapper">
-                                        <div class="comment-content">
-                                            <div class="comment-content-top">
-                                                <div class="comment-content-left">
-                                                    <h6 class="comment-name">{{ review.user.аты_жөні|capfirst }} {{ review.user.тегі|capfirst }}</h6>
-                                                    <span>{{ review.updated_at }}</span>
-                                                    <div class="raising-star">
-                                                        <i class="fa fa-star{% if review.rating == 0.5 %}-half-o{% elif review.rating < 1 %}-o{% endif %}"></i>
-                                                        <i class="fa fa-star{% if review.rating == 1.5 %}-half-o{% elif review.rating < 2 %}-o{% endif %}"></i>
-                                                        <i class="fa fa-star{% if review.rating == 2.5 %}-half-o{% elif review.rating < 3 %}-o{% endif %}"></i>
-                                                        <i class="fa fa-star{% if review.rating == 3.5 %}-half-o{% elif review.rating < 4 %}-o{% endif %}"></i>
-                                                        <i class="fa fa-star{% if review.rating == 4.5 %}-half-o{% elif review.rating < 5 %}-o{% endif %}"></i>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="para-content">
-                                                <h6><b>{{ review.subject }}</b></h6>
-                                                <p>{{ review.review }}</p>
-                                            </div>
+                                    <div class="single-review mb-4 p-3 border rounded bg-white">
+                                        <div class="d-flex justify-content-between">
+                                            <strong>{{ review.user.аты_жөні }} {{ review.user.тегі }}</strong>
+                                            <small class="text-muted">{{ review.created_at|date:"d.m.Y" }}</small>
                                         </div>
-                                    </div>
-                                </li>
-                                {% endfor %}
-                            </ul>
-
-                            <div class="review-form">
-                                <div class="review-form-text-top">
-                                    <h5>ПІКІР ҚОСУ</h5>
-                                </div>
-
-                                <form action="{% url 'submit_review' single_product.id %}" method="POST">
-                                    {% csrf_token %}
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="default-form-box mb-20">
-                                                <label>Шолу тақырыбы <span>*</span></label>
-                                                <input placeholder="Review Title" type="text" name="subject">
-                                            </div>
-                                        </div>
-                                        <div class="col-12">
-                                            <div class="default-form-box">
-                                                <label>Сіздің бағаңыз <span>*</span></label>
-                                                <div class="rating-product">
-                                                    <input type="radio" name="rating" id="rating10" value="5" required><label for="rating10" title="5"></label>
-                                                    <input type="radio" name="rating" id="rating9" value="4.5" required><label for="rating9" title="4.5" class="half"></label>
-                                                    <input type="radio" name="rating" id="rating8" value="4" required><label for="rating8" title="4"></label>
-                                                    <input type="radio" name="rating" id="rating7" value="3.5" required><label for="rating7" title="3.5" class="half"></label>
-                                                    <input type="radio" name="rating" id="rating6" value="3" required><label for="rating6" title="3"></label>
-                                                    <input type="radio" name="rating" id="rating5" value="2.5" required><label for="rating5" title="2.5" class="half"></label>
-                                                    <input type="radio" name="rating" id="rating4" value="2" required><label for="rating4" title="2"></label>
-                                                    <input type="radio" name="rating" id="rating3" value="1.5" required><label for="rating3" title="1.5" class="half"></label>
-                                                    <input type="radio" name="rating" id="rating2" value="1" required><label for="rating2" title="1"></label>
-                                                    <input type="radio" name="rating" id="rating1" value="0.5" required><label for="rating1" title="0.5" class="half"></label>
-                                                </div>                                                
-                                            </div>
-                                        </div>
-                                        <div class="col-12">
-                                            <div class="default-form-box mb-20">
-                                                <label>Сіздің пікіріңіз <span>*</span></label>
-                                                <textarea name="review" placeholder="Message"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-12">
-                                            {% if user.is_authenticated %}
-                                                {% if order_product %}
-                                                    <button class="form-submit-btn" type="submit">Жіберу</button>
+                                        <div class="rating mt-1 mb-2">
+                                            {% for i in "12345" %}
+                                                {% if forloop.counter <= review.rating %}
+                                                    <i class="fa fa-star" style="color:#ea1c26;"></i>
                                                 {% else %}
-                                                    <p>Пікір қалдыру үшін сіз осы өнімді сатып алуыңыз керек</p>
+                                                    <i class="fa fa-star-o" style="color:#ccc;"></i>
                                                 {% endif %}
-                                            {% else %}
-                                                <p>Бұл өнімді қарап шығу үшін жүйеге кіруіңіз керек<span><a style="color: red" href="{% url 'login' %}"> Жүйеге кіру</a></span></p>
-                                            {% endif %}
+                                            {% endfor %}
+                                            <span class="ml-2">{{ review.rating }}</span>
                                         </div>
+                                        <h6><b>{{ review.subject }}</b></h6>
+                                        <p class="mb-1">{{ review.review }}</p>
                                     </div>
-                                </form>
-                            </div>
+                                {% endfor %}
+                            {% else %}
+                                <p>Бұл өнімге әлі пікір жазылмаған.</p>
+                            {% endif %}
 
                         </div>
                     </div>

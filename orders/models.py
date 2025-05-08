@@ -67,5 +67,9 @@ class OrderProduct(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    review_text = models.TextField(blank=True)
+    rating = models.IntegerField(default=0)
+    is_rated = models.BooleanField(default=False)
+
     def __str__(self):
         return self.product.product_name

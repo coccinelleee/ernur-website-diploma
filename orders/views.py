@@ -1,9 +1,12 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
-from carts.models import CartItem
-from orders.models import Order
-from stores.models import Product
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from carts.models import CartItem
+from orders.models import Order, OrderProduct
+from django.contrib import admin
+from stores.models import Product, ReviewRating
+from .forms import ReviewForm
 
 @login_required(login_url='login')
 def place_order(request):
@@ -23,31 +26,41 @@ def place_order(request):
         tax = (2 * total) / 100
         grand_total = total + tax
 
-        # Сохраняем заказ
-        order = Order()
-        order.user = current_user
-        order.аты_жөні = request.POST.get('аты_жөні')
-        order.тегі = request.POST.get('тегі')
-        order.электрондық_пошта = request.POST.get('email')
-        order.phone = request.POST.get('phone')
-        order.address_line_1 = request.POST.get('address_line_1')
-        order.city = request.POST.get('city')
-        order.country = request.POST.get('country')
-        order.order_note = request.POST.get('order_note', '')
-        order.tax = tax
-        order.order_total = grand_total
-        order.ip = request.META.get('REMOTE_ADDR')
+        # Create the order
+        order = Order(
+            user=current_user,
+            аты_жөні=request.POST.get('аты_жөні'),
+            тегі=request.POST.get('тегі'),
+            электрондық_пошта=request.POST.get('email'),
+            phone=request.POST.get('phone'),
+            address_line_1=request.POST.get('address_line_1'),
+            city=request.POST.get('city'),
+            country=request.POST.get('country'),
+            order_note=request.POST.get('order_note', ''),
+            tax=tax,
+            order_total=grand_total,
+            ip=request.META.get('REMOTE_ADDR'),
+            is_ordered=True,
+        )
+        order.save()
+        order.order_number = timezone.now().strftime("%Y%m%d") + str(order.id)
         order.save()
 
-        # Генерируем номер заказа
-        date_str = timezone.now().strftime("%Y%m%d")
-        order.order_number = f"{date_str}{order.id}"
-        order.save()
+        # Create ordered products
+        for item in cart_items:
+            order_product = OrderProduct.objects.create(
+                order=order,
+                user=current_user,
+                product=item.product,
+                quantity=item.quantity,
+                product_price=item.product.price,
+                ordered=True
+            )
+            if item.variations.exists():
+                order_product.variations.set(item.variations.all())
 
-        # Очищаем корзину
         cart_items.delete()
 
-        # Переход на страницу подтверждения
         return render(request, 'orders/order_confirmation.html', {
             'order': order,
             'total': total,
@@ -56,3 +69,34 @@ def place_order(request):
         })
 
     return redirect('checkout')
+
+
+@login_required(login_url='login')
+def submit_review(request, order_product_id):
+    order_product = get_object_or_404(OrderProduct, id=order_product_id, user=request.user)
+    product = order_product.product
+
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.product = product
+            review.user = request.user
+            review.ip = request.META.get('REMOTE_ADDR')
+            review.status = True
+            review.save()
+
+            order_product.is_rated = True
+            order_product.save()
+
+            messages.success(request, 'Пікіріңіз сәтті сақталды.')
+            return redirect('product_details', category_slug=product.category.slug, product_slug=product.slug)
+    else:
+        form = ReviewForm()
+
+    context = {
+        'form': form,
+        'product_review': order_product,
+        'product': product,
+    }
+    return render(request, 'orders/submit_review.html', context)

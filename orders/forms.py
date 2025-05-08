@@ -1,8 +1,15 @@
 from django import forms
-from .models import Order
+from stores.models import ReviewRating
 
-
-class OrderForm(forms.ModelForm):
+class ReviewForm(forms.ModelForm):
     class Meta:
-        model = Order
-        fields = ['аты_жөні', 'тегі', 'phone', 'электрондық_пошта', 'address_line_1', 'address_line_2', 'country', 'state', 'city', 'order_note']
+        model = ReviewRating
+        fields = ['subject', 'review', 'rating']
+        labels = {
+            'subject': 'Шолу тақырыбы',
+            'review': 'Сіздің пікіріңіз',
+            'rating': 'Сіздің бағаңыз',
+        }
+        widgets = {
+            'review': forms.Textarea(attrs={'rows': 3}),
+        }

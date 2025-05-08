@@ -125,3 +125,4 @@ OPENEXCHANGERATES_APP_ID = config('OPENEXCHANGERATES_APP_ID', default=None)
 
 # ID по умолчанию
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
