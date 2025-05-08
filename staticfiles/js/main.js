@@ -1,17 +1,8 @@
 (function ($) {
     "use strict";
 
-
-
-    /*---------------------------
-       Commons Variables
-    ------------------------------ */
     var $window = $(window),
         $body = $("body");
-
-    /*----------------------------------------
-            Background Image             
-    -------------------------------------------*/
 
     $('[data-bg-image]').each(function () {
         var $this = $(this),
@@ -19,9 +10,6 @@
         $this.css('background-image', 'url(' + $image + ')');
     });
 
-    /*---------------------------
-       Menu Fixed On Scroll Active
-    ------------------------------ */
     $(window).on("scroll", function (e) {
         var window_top = $(window).scrollTop() + 1;
         if (window_top > 250) {
@@ -31,24 +19,12 @@
         }
     });
 
-    /*----------------------------------------
-                Bootstrap dropdown               
-        -------------------------------------------*/
-
-    // Add slideDown animation to Bootstrap dropdown when expanding.
-
     $('.dropdown').on('show.bs.dropdown', function () {
         $(this).find('.dropdown-menu').first().stop(true, true).slideDown();
     });
-    // Add slideUp animation to Bootstrap dropdown when collapsing.
     $('.dropdown').on('hide.bs.dropdown', function () {
         $(this).find('.dropdown-menu').first().stop(true, true).slideUp();
     });
-
-
-    /*-------------------------------
-        Create an toggle
-    ---------------------------------*/
 
     $('.color a').on('click', function () {
         $('.sidebar-widget-list a').removeClass('active');
@@ -60,11 +36,6 @@
         $(this).addClass('active-2');
     });
 
-
-    /*-------------------------------
-        Create an toggle
-    ---------------------------------*/
-
     $('.pro-details-color a').on('click', function () {
         $('.pro-details-color a').removeClass('active-color');
         $(this).addClass('active-color');
@@ -75,13 +46,6 @@
         $(this).addClass('active-size');
     });
 
-
-
-
-
-    /*---------------------------------
-        Off Canvas Function
-    -----------------------------------*/
     (function () {
         var $offCanvasToggle = $(".offcanvas-toggle"),
             $offCanvas = $(".offcanvas"),
@@ -107,9 +71,6 @@
         });
     })();
 
-    /*----------------------------------
-        Off Canvas Menu
-    -----------------------------------*/
     function mobileOffCanvasMenu() {
         var $offCanvasNav = $(".offcanvas-menu, .overlay-menu"),
             $offCanvasNavSubMenu = $offCanvasNav.find(".sub-menu");

@@ -10,6 +10,8 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', default=True, cast=bool)
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+if not DEBUG:
+    ALLOWED_HOSTS = ['*']  # Для продакшена, например Railway
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -66,7 +68,6 @@ WSGI_APPLICATION = 'store.wsgi.application'
 
 AUTH_USER_MODEL = 'accounts.Account'
 
-# База данных
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -74,7 +75,6 @@ DATABASES = {
     }
 }
 
-# Пароли
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
@@ -82,7 +82,6 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-# Язык и время
 DEFAULT_CURRENCY = 'KZT'
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
@@ -90,7 +89,6 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
-# Статик
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
@@ -100,29 +98,30 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+# 💾 Google Cloud Storage (через JSON в переменной окружения)
 if not DEBUG:
     DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
     GS_BUCKET_NAME = config('GS_BUCKET_NAME', default='ernur-project')
     GS_PROJECT_ID = 'ernur-project'
 
-    GOOGLE_CREDENTIALS_JSON = config("GOOGLE_APPLICATION_CREDENTIALS", default=None)
+    GOOGLE_CREDENTIALS_JSON = config("GOOGLE_CREDENTIALS_JSON", default=None)
     if GOOGLE_CREDENTIALS_JSON:
-        with open(GOOGLE_CREDENTIALS_JSON) as f:
-            GOOGLE_CREDS = json.load(f)
-        GS_CREDENTIALS = service_account.Credentials.from_service_account_info(GOOGLE_CREDS)
-        MEDIA_URL = f'https://storage.googleapis.com/{GS_BUCKET_NAME}/'
+        try:
+            GOOGLE_CREDS = json.loads(GOOGLE_CREDENTIALS_JSON)
+            GS_CREDENTIALS = service_account.Credentials.from_service_account_info(GOOGLE_CREDS)
+            MEDIA_URL = f'https://storage.googleapis.com/{GS_BUCKET_NAME}/'
+        except json.JSONDecodeError:
+            raise Exception("GOOGLE_CREDENTIALS_JSON: Invalid JSON format")
 
-# SMTP (Anymail + Mailjet)
+# 📧 Mailjet
 ANYMAIL = {
     "MAILJET_API_KEY": config('MAILJET_API_KEY'),
     "MAILJET_SECRET_KEY": config('MAILJET_SECRET_KEY'),
 }
-EMAIL_BACKEND = 'anymail.backends.mailjet.EmailBackend'
-DEFAULT_FROM_EMAIL = 'support@dapperautoparts.com'
+EMAIL_BACKEND = config("EMAIL_BACKEND", default="anymail.backends.mailjet.EmailBackend")
+DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL", default="support@yourdomain.com")
 
-# Валюта (openexchangerates.org)
+# 💱 Валюта
 OPENEXCHANGERATES_APP_ID = config('OPENEXCHANGERATES_APP_ID', default=None)
 
-# ID по умолчанию
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
