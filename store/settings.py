@@ -105,12 +105,12 @@ if not DEBUG:
     GS_BUCKET_NAME = config('GS_BUCKET_NAME', default='ernur-project')
     GS_PROJECT_ID = 'ernur-project'
 
-    with open(config("GOOGLE_APPLICATION_CREDENTIALS")) as f:
-        GOOGLE_CREDS = json.load(f)
-
-    GS_CREDENTIALS = service_account.Credentials.from_service_account_info(GOOGLE_CREDS)
-
-    MEDIA_URL = f'https://storage.googleapis.com/{GS_BUCKET_NAME}/'
+    GOOGLE_CREDENTIALS_JSON = config("GOOGLE_APPLICATION_CREDENTIALS", default=None)
+    if GOOGLE_CREDENTIALS_JSON:
+        with open(GOOGLE_CREDENTIALS_JSON) as f:
+            GOOGLE_CREDS = json.load(f)
+        GS_CREDENTIALS = service_account.Credentials.from_service_account_info(GOOGLE_CREDS)
+        MEDIA_URL = f'https://storage.googleapis.com/{GS_BUCKET_NAME}/'
 
 # SMTP (Anymail + Mailjet)
 ANYMAIL = {
