@@ -1,34 +1,88 @@
-/*Header Top Area*/
 .header-top{
     font-size: 13px;
 }
 
-.header-user-menu{
+.header-user-menu {
     display: flex;
+    flex-wrap: nowrap;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    gap: 20px;
     align-items: center;
     justify-content: flex-end;
+  }
+  
+  .header-user-menu > li {
+    margin-right: 40px;
+    width: 160px;
+    position: relative;
+    white-space: nowrap;
+  }
+  
+  .header-user-menu > li:last-child {
+    margin-right: 0;
+  }
+  
+  .header-user-menu > li::after {
+    position: absolute;
+    content: "|";
+    top: 50%;
+    transform: translateY(-50%);
+    right: calc(0% - 20px);
+  }
+  
+  .header-user-menu > li:last-child::after {
+    display: none;
+  }
+  
+  .header-user-menu > li > a {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    align-items: center;
+    line-height: 46px;
+  }
+  
+  .header-user-menu > li > a:hover {
+    color: #ffe9e9;
+  }
+  
+  .header-user-menu .has-user-dropdown ul.user-sub-menu {
+    display: none;
+    position: absolute;
+    list-style: none;
+    background: white;
+    padding: 10px;
+    border: 1px solid #ccc;
+    margin-top: 10px;
+    z-index: 1000; /* Чтобы меню отображалось поверх других элементов */
+  }
+  
+  .header-user-menu .has-user-dropdown:hover ul.user-sub-menu,
+  .header-user-menu .has-user-dropdown ul.user-sub-menu:hover {
+    display: block;
+    visibility: visible;
+    opacity: 1;
+  }  
 
-    & > li{
-        margin-right: 40px;
-        width: 160px;
-        &:last-child{margin-right: 0;}
-        position: relative;
-        &::after{
-            position: absolute;
-            content: "|";
-            top: 50%;
-            transform: translateY(-50%);
-            right: calc(0% - 20px);
-        }
-        &:last-child::after{
-            display: none;
-        }
-    }
+.header-user-menu .has-user-dropdown {
+    position: relative;
+}
 
-    & > li > a{
-        display: inline-block;
-        line-height: 46px;
-    }
+.header-user-menu .has-user-dropdown ul.user-sub-menu {
+    display: none;
+    position: absolute;
+    list-style: none;
+    background: white;
+    padding: 10px;
+    border: 1px solid #ccc;
+    margin-top: 10px;
+}
+
+.header-user-menu .has-user-dropdown:hover ul.user-sub-menu,
+.header-user-menu .has-user-dropdown ul.user-sub-menu:hover {
+    display: block;
 }
 
 

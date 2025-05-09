@@ -1,14 +1,71 @@
+/*-----------------------------------------------------------------------------------
+
+    Template Name: Aments
+    Template Description: Aments - Car Accessories Shop HTML Template
+    Version: 2.0.0
+    Template Author: Jaber Hossain Shovon
+    Template URL: https://hasthemes.com/
+
+-----------------------------------------------------------------------------------
+
+    CSS INDEX
+    ===================
+
+    -> Base - Default
+    -> Base - Utilities
+    -> Base - Animation
+    -> Base - Animation
+
+    -> Components - Hero
+    -> Components - Products
+    -> Components - Banner
+    -> Components - Company Logo
+    -> Components - Blog Feed
+    -> Components - Form
+    -> Components - Breadcrumb
+    -> Components - Sidebar Widget
+    -> Components - Page Pagination
+    -> Components - Table
+    -> Components - Comment
+    -> Components - Testimonial
+    -> Components - Tab Style
+    -> Components - Slider Style
+
+
+    -> Pages - Cart
+    -> Pages - Checkout
+    -> Pages - My Account
+    -> Pages - 404
+    -> Pages - Log In
+    -> Pages - Product Details
+    -> Pages - Blogs
+    -> Pages - About Us
+    -> Pages - Service
+    -> Pages - FAQ
+    -> Pages - Privacy Policy
+    -> Pages - Contact Us
+
+    -> Layout - Header
+    -> Layout - Offcanvas
+    -> Layout - Modal
+    -> Layout - Footer
+
+-----------------------------------------------------------------------------------*/
+
+/*Bootstrap CSS*/
 @import "./bootstrap/functions";
 @import "base/variabls";
 @import "./bootstrap/bootstrap";
 @import "base/mixins";
 
 
+/*Base CSS*/
 @import "base/common";
 @import "base/utilities";
 @import "base/animation";
 
 
+/*Components*/
 @import "components/hero";
 @import "components/product";
 @import "components/banner";
@@ -25,6 +82,7 @@
 @import "components/slider-style";
 
 
+/*Pages*/
 @import "pages/cart";
 @import "pages/checkout";
 @import "pages/my-account";
@@ -40,9 +98,11 @@
 @import "pages/compare";
 
 
+/*Layout CSS*/
 @import "layout/header";
 @import "layout/offcanvas";
 @import "layout/modal";
 @import "layout/footer";
 
+/*Scroll To Top*/
 @import "base/material-scrolltop";
