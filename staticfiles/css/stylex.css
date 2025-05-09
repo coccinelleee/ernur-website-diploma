@@ -20164,7 +20164,7 @@ Layout - Footer
 }
 
 .material-scrolltop, .material-scrolltop::before {
-  background-image: url(../../assets/images/icon/top-arrow.svg);
+  background-image: url('/static/images/icon/top-arrow.svg');
   background-position: center 50%;
   background-repeat: no-repeat;
 }

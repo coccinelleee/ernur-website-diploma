@@ -94,7 +94,7 @@ $mst-icon: true !default; // Set false if you want to use your own sign directly
 }
 
 %mst-icon {
-  background-image: url(../../assets/images/icon/top-arrow.svg);
+  background-image: url('/static/images/icon/top-arrow.svg');
   background-position: center 50%;
   background-repeat: no-repeat;
 }
