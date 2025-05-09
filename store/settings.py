@@ -2,7 +2,6 @@ import os
 import json
 from pathlib import Path
 from decouple import config
-from google.oauth2 import service_account
 import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -32,12 +31,12 @@ INSTALLED_APPS = [
     'stores',
     'carts',
     'orders',
-#    'admin_honeypot',
     'admin_thumbnails',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # ✅ WhiteNoise для статики
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -69,10 +68,9 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'store.wsgi.application'
-
 AUTH_USER_MODEL = 'accounts.Account'
 
-# ✅ Переключение между SQLite (локально) и PostgreSQL (на Render)
+# ✅ База данных
 if DEBUG:
     DATABASES = {
         'default': {
@@ -82,9 +80,7 @@ if DEBUG:
     }
 else:
     DATABASES = {
-        'default': dj_database_url.config(
-            default=config('DATABASE_URL')
-        )
+        'default': dj_database_url.config(default=config('DATABASE_URL'))
     }
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -94,25 +90,26 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-DEFAULT_CURRENCY = 'KZT'
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
-USE_L10N = True
 USE_TZ = True
 
-# STATICFILES_DIRS = [
-#    BASE_DIR / "static",
-# ]
+DEFAULT_CURRENCY = 'KZT'
 
+# ✅ Статика
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / "staticfiles"
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
+# ✅ Медиа
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# 💾 Google Cloud Storage (только если продакшн)
+# ✅ Google Cloud (только при DEBUG=False)
 if not DEBUG:
+    from google.oauth2 import service_account
+
     DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
     GS_BUCKET_NAME = config('GS_BUCKET_NAME', default='ernur-project')
     GS_PROJECT_ID = 'ernur-project'
