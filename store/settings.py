@@ -3,15 +3,19 @@ import json
 from pathlib import Path
 from decouple import config
 from google.oauth2 import service_account
+import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'web-production-3eaa.up.railway.app']
-if not DEBUG:
-    ALLOWED_HOSTS = ['*']  # Для продакшена, например Railway
+# ✅ Поддержка ALLOWED_HOSTS для Render
+RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS = [RENDER_EXTERNAL_HOSTNAME]
+else:
+    ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -68,12 +72,20 @@ WSGI_APPLICATION = 'store.wsgi.application'
 
 AUTH_USER_MODEL = 'accounts.Account'
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+# ✅ Переключение между SQLite (локально) и PostgreSQL (на Render)
+if DEBUG:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': dj_database_url.config(
+            default=config('DATABASE_URL')
+        )
+    }
 
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
@@ -98,7 +110,7 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# 💾 Google Cloud Storage (через JSON в переменной окружения)
+# 💾 Google Cloud Storage (только если продакшн)
 if not DEBUG:
     DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
     GS_BUCKET_NAME = config('GS_BUCKET_NAME', default='ernur-project')
@@ -109,7 +121,7 @@ if not DEBUG:
     if GOOGLE_CREDENTIALS_JSON:
         try:
             GOOGLE_CREDS = json.loads(GOOGLE_CREDENTIALS_JSON)
-            if isinstance(GOOGLE_CREDS, str):  # 🔍 защита от двойной сериализации
+            if isinstance(GOOGLE_CREDS, str):
                 GOOGLE_CREDS = json.loads(GOOGLE_CREDS)
             GS_CREDENTIALS = service_account.Credentials.from_service_account_info(GOOGLE_CREDS)
             MEDIA_URL = f'https://storage.googleapis.com/{GS_BUCKET_NAME}/'
