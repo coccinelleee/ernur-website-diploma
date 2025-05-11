@@ -8,16 +8,28 @@ from .models import Account, UserProfile
 
 
 class AccountAdmin(UserAdmin):
-    # Making the data appear in a table
     list_display = ('электрондық_пошта', 'аты_жөні', 'тегі', 'username', 'last_login', 'date_joined', 'is_active')
     list_display_links = ('электрондық_пошта', 'аты_жөні', 'тегі')
     readonly_fields = ('last_login', 'date_joined')
     ordering = ('-date_joined',)
 
+    fieldsets = (
+        (None, {'fields': ('электрондық_пошта', 'password')}),
+        ('Personal Info', {'fields': ('аты_жөні', 'тегі', 'телефон_нөмірі', 'username')}),
+        ('Permissions', {'fields': ('is_admin', 'is_staff', 'is_active', 'is_superadmin', 'is_superuser')}),
+        ('Important dates', {'fields': ('last_login', 'date_joined')}),
+    )
+
+    add_fieldsets = (
+        (None, {
+            'classes': ('wide',),
+            'fields': ('электрондық_пошта', 'аты_жөні', 'тегі', 'телефон_нөмірі', 'username', 'password1', 'password2'),
+        }),
+    )
+
+    search_fields = ('электрондық_пошта', 'username')
     filter_horizontal = ()
     list_filter = ()
-    fieldsets = ()
-
 
 class UserProfileAdmin(admin.ModelAdmin):
     def thumbnail(self, object):
