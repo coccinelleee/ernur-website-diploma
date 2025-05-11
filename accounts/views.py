@@ -35,6 +35,9 @@ def demo_login(request):
         return HttpResponse("❌ Demo user not found", status=404)
 
 def load_superuser(request):
+    import os
+    if not os.path.exists(os.path.join('accounts', 'fixtures', 'user.json')):
+        return HttpResponse("⚠️ user.json не найден, загрузка пропущена.")
     try:
         call_command('loaddata', 'user.json')
         return HttpResponse("✅ Superuser loaded successfully.")
