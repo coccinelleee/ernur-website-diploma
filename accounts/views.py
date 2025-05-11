@@ -16,7 +16,6 @@ from carts.views import _cart_id
 from carts.models import Cart, CartItem
 from orders.models import Order, OrderProduct
 from django.http import HttpResponse, JsonResponse
-from django.core.management import call_command
 from django.contrib.auth import login as auth_login
 from django.shortcuts import redirect
 from accounts.models import Account
