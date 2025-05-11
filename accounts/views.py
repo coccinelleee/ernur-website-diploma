@@ -15,7 +15,7 @@ from django.views.decorators.csrf import csrf_exempt
 from carts.views import _cart_id
 from carts.models import Cart, CartItem
 from orders.models import Order, OrderProduct
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.core.management import call_command
 import requests
 
@@ -26,6 +26,10 @@ def load_superuser(request):
         return HttpResponse("✅ Superuser loaded successfully.")
     except Exception as e:
         return HttpResponse(f"❌ Error loading superuser: {str(e)}")
+    
+def debug_users(request):
+    users = Account.objects.values('электрондық_пошта', 'is_staff', 'is_superuser', 'is_active')
+    return JsonResponse(list(users), safe=False)
 
 @csrf_exempt
 def register(request):

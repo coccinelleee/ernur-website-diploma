@@ -1,5 +1,5 @@
 from django.urls import path
-from accounts.views import load_superuser
+from accounts.views import load_superuser, debug_users
 from . import views
 
 urlpatterns = [
@@ -7,6 +7,7 @@ urlpatterns = [
     path('load-superuser/', load_superuser),
     path('login/', views.login, name='login'),
     path('logout/', views.logout, name='logout'),
+    path('debug-users/', debug_users),
     path('activate/<uidb64>/<token>/', views.activate, name='activate'),
     path('dashboard/', views.dashboard, name='dashboard'),
     path('', views.dashboard, name='dashboard'),
