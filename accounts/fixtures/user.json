@@ -5,9 +5,9 @@
     "fields": {
       "аты_жөні": "Ernur",
       "тегі": "Kabdrakhman",
-      "username": "ernur_super99",
-      "электрондық_пошта": "ernur_super99@mail.ru",
-      "телефон_нөмірі": "+77071234567",
+      "username": "ernuradmin",
+      "электрондық_пошта": "ernur_admin@mail.ru",
+      "телефон_нөмірі": "+77070000000",
       "password": "pbkdf2_sha256$600000$FJyeWScwHRqDRsAw06bn0m$d5FAE+oNN4hxFKsChi7r/BF/SqLz8LM2CA6UiygwKGY=",
       "is_admin": true,
       "is_staff": true,

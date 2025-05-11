@@ -49,6 +49,7 @@ class Account(AbstractBaseUser):
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
     is_superadmin = models.BooleanField(default=False)
+    is_superuser = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'электрондық_пошта'
     REQUIRED_FIELDS = ['username', 'аты_жөні', 'тегі']
