@@ -17,7 +17,7 @@ from carts.models import Cart, CartItem
 from orders.models import Order, OrderProduct
 from django.http import HttpResponse, JsonResponse
 from django.core.management import call_command
-from django.contrib.auth import login
+from django.contrib.auth import login as auth_login
 from django.shortcuts import redirect
 from accounts.models import Account
 import requests
@@ -26,10 +26,13 @@ def demo_login(request):
     if request.user.is_authenticated:
         return redirect('/admin/')  # если уже вошёл
 
-    demo_user = Account.objects.get(электрондық_пошта="admin06ernur@mail.ru")
-    demo_user.backend = 'django.contrib.auth.backends.ModelBackend'
-    login(request, demo_user)
-    return redirect('/admin/')
+    try:
+        demo_user = Account.objects.get(электрондық_пошта="admin06ernur@mail.ru")
+        demo_user.backend = 'django.contrib.auth.backends.ModelBackend'
+        auth_login(request, demo_user)
+        return redirect('/admin/')
+    except Account.DoesNotExist:
+        return HttpResponse("❌ Demo user not found", status=404)
 
 def load_superuser(request):
     try:
