@@ -3,21 +3,6 @@
 import os
 import sys
 
-def create_demo_superuser():
-    import django
-    django.setup()
-    from accounts.models import Account
-    if not Account.objects.filter(username='Admin06').exists():
-        Account.objects.create_superuser(
-            электрондық_пошта='admin06ernur@mail.ru',
-            username='Admin06',
-            аты_жөні='Admin06 Ernur',
-            тегі='Ernur067',
-            password='Ernur2025'
-        )
-        print("✅ Demo superuser created")
-    else:
-        print("ℹ️ Demo superuser already exists")
 
 def main():
     """Run administrative tasks."""
@@ -31,11 +16,24 @@ def main():
             "forget to activate a virtual environment?"
         ) from exc
 
-    # Инициализация и создание суперюзера
-    create_demo_superuser()
+    # Отложенное создание суперпользователя после миграций
+    if len(sys.argv) > 1 and sys.argv[1] == 'migrate':
+        execute_from_command_line(sys.argv)
+        import django
+        django.setup()
+        from accounts.models import Account
+        if not Account.objects.filter(username='Admin06').exists():
+            Account.objects.create_superuser(
+                электрондық_пошта='admin06ernur@mail.ru',
+                username='Admin06',
+                аты_жөні='Admin06 Ernur',
+                тегі='Ernur067',
+                password='Ernur2025'
+            )
+        return
 
-    # Запуск команды Django
     execute_from_command_line(sys.argv)
+
 
 if __name__ == '__main__':
     main()
