@@ -12,7 +12,9 @@
       "is_admin": true,
       "is_staff": true,
       "is_active": true,
-      "is_superadmin": true
+      "is_superadmin": true,
+      "date_joined": "2025-05-11T12:00:00Z",
+      "last_login": "2025-05-11T12:00:00Z"
     }
   }
 ]
