@@ -15,8 +15,17 @@ from django.views.decorators.csrf import csrf_exempt
 from carts.views import _cart_id
 from carts.models import Cart, CartItem
 from orders.models import Order, OrderProduct
+from django.http import HttpResponse
+from django.core.management import call_command
 import requests
 
+
+def load_superuser(request):
+    try:
+        call_command('loaddata', 'user.json')
+        return HttpResponse("✅ Superuser loaded successfully.")
+    except Exception as e:
+        return HttpResponse(f"❌ Error loading superuser: {str(e)}")
 
 @csrf_exempt
 def register(request):

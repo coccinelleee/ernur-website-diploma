@@ -10,6 +10,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', default=True, cast=bool)
 
+AUTH_USER_MODEL = 'accounts.User'  # пример
+
 # Импорт GCP credentials только в продакшене
 if not DEBUG:
     from google.oauth2 import service_account

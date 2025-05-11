@@ -1,0 +1,16 @@
+[
+  {
+    "model": "accounts.account",
+    "pk": 1,
+    "fields": {
+      "email": "ernur0066@mail.ru",
+      "username": "Ernurrr",
+      "first_name": "Ernurr",
+      "last_name": "Kabrakhmaan",
+      "password": "pbkdf2_sha256$600000$FJyeWScwHRqDRsAw06bn0m$d5FAE+oNN4hxFKsChi7r/BF/SqLz8LM2CA6UiygwKGY=",
+      "is_superuser": true,
+      "is_staff": true,
+      "is_active": true
+    }
+  }
+]

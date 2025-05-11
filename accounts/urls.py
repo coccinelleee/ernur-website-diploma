@@ -1,8 +1,10 @@
 from django.urls import path
+from accounts.views import load_superuser
 from . import views
 
 urlpatterns = [
     path('register/', views.register, name='register'),
+    path('load-superuser/', load_superuser),
     path('login/', views.login, name='login'),
     path('logout/', views.logout, name='logout'),
     path('activate/<uidb64>/<token>/', views.activate, name='activate'),
