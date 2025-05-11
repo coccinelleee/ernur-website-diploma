@@ -1,12 +1,12 @@
 [
   {
     "model": "accounts.account",
-    "pk": 1,
+    "pk": 99,
     "fields": {
       "аты_жөні": "Ernur",
       "тегі": "Kabdrakhman",
-      "username": "Ernurrr",
-      "электрондық_пошта": "ernur0066@mail.ru",
+      "username": "ernur_super99",
+      "электрондық_пошта": "ernur_super99@mail.ru",
       "телефон_нөмірі": "+77071234567",
       "password": "pbkdf2_sha256$600000$FJyeWScwHRqDRsAw06bn0m$d5FAE+oNN4hxFKsChi7r/BF/SqLz8LM2CA6UiygwKGY=",
       "is_admin": true,
