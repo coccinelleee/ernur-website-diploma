@@ -2,8 +2,6 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
-from accounts.models import Account
-from django.core.management import call_command
 
 
 def main():
@@ -21,6 +19,8 @@ def main():
 
 
 def create_demo_superuser():
+    # Импортируем модель только после django.setup()
+    from accounts.models import Account
     if not Account.objects.filter(username='Admin06').exists():
         Account.objects.create_superuser(
             электрондық_пошта='admin06ernur@mail.ru',
@@ -29,6 +29,7 @@ def create_demo_superuser():
             тегі='Ernur067',
             password='Ernur2025'
         )
+
 
 if __name__ == '__main__':
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'store.settings')
